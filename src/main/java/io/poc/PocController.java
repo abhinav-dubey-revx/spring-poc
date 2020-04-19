@@ -20,42 +20,21 @@ import org.springframework.web.bind.annotation.RestController;
 public class PocController {
 
 	@Autowired
-	PocRepository repo;
-
-	@Autowired
 	PocService service;
 
-	// @PostMapping("/create")
-//	public String create(@RequestBody PocEntity advertisers) {
-//		repo.save(advertisers);
-//		return "saved";
-//	}
-//
-//	@GetMapping("/getAll")
-//	public List<PocEntity> getAll() {
-//		return (List<PocEntity>) repo.findAll();
-//	}
-//
-//	@GetMapping("/get/{id}")
-//	public PocEntity getById(@PathVariable String id) {
-//		return repo.findById(Integer.parseInt(id)).get();	
-//	}
-//
-//	@DeleteMapping("/delete/{id}")
-//	public String delete(@PathVariable String id) {
-//		repo.deleteById(Integer.parseInt(id));
-//		return "deleted";
-//	}
-//	
-//	@PutMapping("/update/{id}")
-//	public String update(@RequestBody PocEntity advertiser) {
-//		repo.save(advertiser);
-//		return "updated";
-//	}
 
 	@PostMapping("/create")
-	public PocResponseEntity create(@RequestBody PocRequestModel advertiserReq) {
+	public PocResponseEntity create(@RequestBody PocRequestModel advertiserReq) throws Exception {
 		PocResponseEntity returnVal = new PocResponseEntity();
+		
+		//if(advertiserReq.getFirstName().isEmpty())throw new Exception(ErrorMessages.MISING_REQUIRED_FEILD.getErrorMessage());
+		
+		if(advertiserReq.getFirstName().isEmpty())throw new PocServiceException(ErrorMessages.MISING_REQUIRED_FEILD.getErrorMessage());
+		
+		//this is for  test
+		if(advertiserReq.getFirstName().isEmpty())throw new NullPointerException("Null ptr Exception");
+
+
 		PocDto sendDto = new PocDto();
 		BeanUtils.copyProperties(advertiserReq, sendDto); // advertiserReq -> dbDto
 		PocDto createdDto = service.create(sendDto);
@@ -63,10 +42,10 @@ public class PocController {
 		return returnVal;
 	}
 
-	@GetMapping("/getAll")
-	public List<PocEntity> getAll() {
-		return (List<PocEntity>) repo.findAll();
-	}
+//	@GetMapping("/getAll")
+//	public List<PocEntity> getAll() {
+//		return (List<PocEntity>) repo.findAll();
+//	}
 
 	@GetMapping(path = "/get/{id}")
 	public PocResponseEntity getById(@PathVariable String id) {
