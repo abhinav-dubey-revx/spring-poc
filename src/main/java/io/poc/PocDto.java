@@ -2,44 +2,22 @@ package io.poc;
 
 import java.io.Serializable;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+//shared as information exchange object between various layers 
+public class PocDto implements Serializable {
 
-@Entity
-@Table(name = "advertiser_2")
-public class PocEntity implements Serializable {
-
-	private static final long serialVersionUID = -6936553881785829687L;
-	@Id
-	@GeneratedValue
-	private long id; // database key , auto-incremented
-
-	@Column(nullable = false)
-	private long userId; // public user id , returned with response , BUT not the DB primary-key
-
-	@Column(nullable = false)
+	private static final long serialVersionUID = -5078931362184711454L;
+	private long id; // database id which is auto-incremented from database settings
+	private String userId; // public user id , returned with response , BUT not the DB primary-key
 	private String firstName;
-
-	@Column(nullable = false)
 	private String lastName;
-
-	@Column(nullable = false)
 	private String email;
-
-	@Column(nullable = false)
 	private String password;
 
-	@Column(nullable = false)
 	private String encryptedPassword;
-
 	private String emailVerificationToken;
-
-	@Column(nullable = false)
 	private boolean emailVerificationStatus = false;
 
+	//GETTER-SETTER
 	public long getId() {
 		return id;
 	}
@@ -48,11 +26,11 @@ public class PocEntity implements Serializable {
 		this.id = id;
 	}
 
-	public long getUserId() {
+	public String getUserId() {
 		return userId;
 	}
 
-	public void setUserId(long userId) {
+	public void setUserId(String userId) {
 		this.userId = userId;
 	}
 
