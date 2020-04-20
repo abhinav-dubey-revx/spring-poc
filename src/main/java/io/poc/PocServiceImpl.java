@@ -1,5 +1,8 @@
 package io.poc;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -55,6 +58,17 @@ public class PocServiceImpl implements PocService {
 		// TODO Auto-generated method stub
 		PocEntity deleteEntity = repository.findByUserId(id);
 		repository.delete(deleteEntity);
+		
+	}
+	
+	@Override
+	public List<PocResponseEntity> getAll() {
+//		// TODO Auto-generated method stub
+//		Iterable<PocEntity> iterable = repository.findAll();
+//		List<PocResponseEntity> returnList = new ArrayList<PocResponseEntity>();
+//		Itera
+//		
+		return null;
 		
 	}
 

@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.annotations.ApiOperation;
+
 @RestController
 @RequestMapping("/advertiser") // http:localhost:<port>/advertiser/<mapping_url>
 public class PocController {
@@ -23,14 +25,15 @@ public class PocController {
 	PocService service;
 
 
+	@ApiOperation(value="Creates new Advertiser" , notes= "return public user id.")
 	@PostMapping("/create")
 	public PocResponseEntity create(@RequestBody PocRequestModel advertiserReq) throws Exception {
 		PocResponseEntity returnVal = new PocResponseEntity();
-		
+
 		//if(advertiserReq.getFirstName().isEmpty())throw new Exception(ErrorMessages.MISING_REQUIRED_FEILD.getErrorMessage());
-		
+
 		if(advertiserReq.getFirstName().isEmpty())throw new PocServiceException(ErrorMessages.MISING_REQUIRED_FEILD.getErrorMessage());
-		
+
 		//this is for  test
 		if(advertiserReq.getFirstName().isEmpty())throw new NullPointerException("Null ptr Exception");
 
@@ -42,11 +45,14 @@ public class PocController {
 		return returnVal;
 	}
 
-//	@GetMapping("/getAll")
-//	public List<PocEntity> getAll() {
-//		return (List<PocEntity>) repo.findAll();
-//	}
+	
+	@ApiOperation(value="get all advertiser" , notes= "all Advertiser from AdX.Advertiser")
+	@GetMapping("/getAll")
+	public List<PocResponseEntity> getAll() {
+		return service.getAll();
+	}
 
+	@ApiOperation(value="get advertiser by Id" , notes= "advertiser from DB : from AdX.Advertiser")
 	@GetMapping(path = "/get/{id}")
 	public PocResponseEntity getById(@PathVariable String id) {
 		PocResponseEntity returnVal = new PocResponseEntity();
@@ -55,6 +61,7 @@ public class PocController {
 		return returnVal;
 	}
 
+	@ApiOperation(value="edit an advertiser" , notes= "updates advertiser in db")
 	@PutMapping(path = "/update/{id}")
 	public PocResponseEntity update(@RequestBody PocRequestModel updateReq, @PathVariable String id) {
 		PocResponseEntity returnVal = new PocResponseEntity();
@@ -65,6 +72,7 @@ public class PocController {
 		return returnVal;
 	}
 
+	@ApiOperation(value="delete an advertiser" , notes= "deletes advertiser in db")
 	@DeleteMapping(path = "/delete/{id}")
 	public String delete(@PathVariable String id) {
 		service.delete(Long.parseLong(id));
