@@ -1,4 +1,4 @@
-package io.poc;
+package io.poc.exception;
 
 import java.util.Date;
 

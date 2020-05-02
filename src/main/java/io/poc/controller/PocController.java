@@ -1,8 +1,11 @@
-package io.poc;
+package io.poc.controller;
 
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -15,14 +18,27 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.poc.exception.ErrorMessages;
+import io.poc.exception.ApiException;
+import io.poc.model.PocDto;
+import io.poc.model.PocRequestModel;
+import io.poc.model.PocResponseEntity;
+import io.poc.model.StrategyQuickEditDTO;
+import io.poc.service.PocService;
+import io.poc.utils.Helper;
 import io.swagger.annotations.ApiOperation;
 
 @RestController
 @RequestMapping("/advertiser") // http:localhost:<port>/advertiser/<mapping_url>
 public class PocController {
 
+	private static final Logger logger = LogManager.getLogger(PocController.class);
+
 	@Autowired
 	PocService service;
+
+	@Autowired
+	Helper helper;
 
 
 	@ApiOperation(value="Creates new Advertiser" , notes= "return public user id.")
@@ -30,22 +46,18 @@ public class PocController {
 	public PocResponseEntity create(@RequestBody PocRequestModel advertiserReq) throws Exception {
 		PocResponseEntity returnVal = new PocResponseEntity();
 
-		//if(advertiserReq.getFirstName().isEmpty())throw new Exception(ErrorMessages.MISING_REQUIRED_FEILD.getErrorMessage());
+		helper.validateCreateRequest(advertiserReq);
 
-		if(advertiserReq.getFirstName().isEmpty())throw new PocServiceException(ErrorMessages.MISING_REQUIRED_FEILD.getErrorMessage());
+		PocDto DO = new PocDto();
+		BeanUtils.copyProperties(advertiserReq, DO); // advertiserReq -> db object
+		PocDto createdDto = service.create(DO);
+		BeanUtils.copyProperties(createdDto, returnVal); // createdAdv -> resp object
 
-		//this is for  test
-		if(advertiserReq.getFirstName().isEmpty())throw new NullPointerException("Null ptr Exception");
-
-
-		PocDto sendDto = new PocDto();
-		BeanUtils.copyProperties(advertiserReq, sendDto); // advertiserReq -> dbDto
-		PocDto createdDto = service.create(sendDto);
-		BeanUtils.copyProperties(createdDto, returnVal); // createdAdv -> returnVal
+		//throw new ApiException("test");
 		return returnVal;
 	}
 
-	
+
 	@ApiOperation(value="get all advertiser" , notes= "all Advertiser from AdX.Advertiser")
 	@GetMapping("/getAll")
 	public List<PocResponseEntity> getAll() {
@@ -78,5 +90,21 @@ public class PocController {
 		service.delete(Long.parseLong(id));
 		return "deleted";
 	}
+
+
+	//	@ApiOperation(value="get advertiser by Id" , notes= "advertiser from DB : from AdX.Advertiser")
+	//	@GetMapping(path = "/cast/{id}")
+	//	public StrategyQuickEditDTO castById(@PathVariable String id) {
+	//		StrategyQuickEditDTO returnVal = new StrategyQuickEditDTO();
+	//		returnVal = service.getCastDetails(Long.parseLong(id));
+	//		return returnVal;
+	//	}
+
+
+	//	@ApiOperation(value="get advertiser by Id" , notes= "advertiser from DB : from AdX.Advertiser")
+	//	@GetMapping(path = "/random")
+	//	public Object random() {		
+	//		return service.random();
+	//	}
 
 }
