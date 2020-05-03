@@ -21,14 +21,14 @@ public class Helper {
 	}
 
 	public void validateCreateRequest(PocRequestModel advertiserReq){
-		try {
-			if(advertiserReq.getName().isEmpty()) {
-				throw new ApiException("name missing");
+		//		try {
+		if(advertiserReq.getName().endsWith("z") ) {
+			throw new ApiException("name missing");
 
-			}	
-		}catch(ApiException e) {
-
-		}
+		}	
+		//		}catch(ApiException e) {
+		//
+		//		}
 
 
 	}

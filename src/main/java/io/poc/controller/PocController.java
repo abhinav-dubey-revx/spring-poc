@@ -23,7 +23,7 @@ import io.poc.exception.ApiException;
 import io.poc.model.PocDto;
 import io.poc.model.PocRequestModel;
 import io.poc.model.PocResponseEntity;
-import io.poc.model.StrategyQuickEditDTO;
+import io.poc.model.SomeFeildsDTO;
 import io.poc.service.PocService;
 import io.poc.utils.Helper;
 import io.swagger.annotations.ApiOperation;
@@ -45,21 +45,18 @@ public class PocController {
 	@PostMapping("/create")
 	public PocResponseEntity create(@RequestBody PocRequestModel advertiserReq) throws Exception {
 		PocResponseEntity returnVal = new PocResponseEntity();
-
-		helper.validateCreateRequest(advertiserReq);
-
+		//helper.validateCreateRequest(advertiserReq);
 		PocDto DO = new PocDto();
 		BeanUtils.copyProperties(advertiserReq, DO); // advertiserReq -> db object
 		PocDto createdDto = service.create(DO);
 		BeanUtils.copyProperties(createdDto, returnVal); // createdAdv -> resp object
 
-		//throw new ApiException("test");
 		return returnVal;
 	}
 
 
 	@ApiOperation(value="get all advertiser" , notes= "all Advertiser from AdX.Advertiser")
-	@GetMapping("/getAll")
+	@GetMapping("/get/all")
 	public List<PocResponseEntity> getAll() {
 		return service.getAll();
 	}
@@ -92,19 +89,14 @@ public class PocController {
 	}
 
 
-	//	@ApiOperation(value="get advertiser by Id" , notes= "advertiser from DB : from AdX.Advertiser")
-	//	@GetMapping(path = "/cast/{id}")
-	//	public StrategyQuickEditDTO castById(@PathVariable String id) {
-	//		StrategyQuickEditDTO returnVal = new StrategyQuickEditDTO();
-	//		returnVal = service.getCastDetails(Long.parseLong(id));
-	//		return returnVal;
-	//	}
+	@ApiOperation(value="get some feilds of advertiser by Id" , notes= "feilds of advertiser from DB : from AdX.Advertiser")
+	@GetMapping(path = "/getSomeFeilds/{id}")
+	public SomeFeildsDTO getSomeFeilds(@PathVariable String id) {
+		SomeFeildsDTO someFeildsDTO = new SomeFeildsDTO();
+		someFeildsDTO =  service.getSomeFeilds(Long.parseLong(id));
+		return someFeildsDTO;
+	}
 
 
-	//	@ApiOperation(value="get advertiser by Id" , notes= "advertiser from DB : from AdX.Advertiser")
-	//	@GetMapping(path = "/random")
-	//	public Object random() {		
-	//		return service.random();
-	//	}
 
 }

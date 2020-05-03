@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import io.poc.entity.PocEntity;
 import io.poc.model.PocDto;
 import io.poc.model.PocResponseEntity;
-import io.poc.model.StrategyQuickEditDTO;
+import io.poc.model.SomeFeildsDTO;
 import io.poc.repo.PocRepository;
 import io.poc.service.PocService;
 import io.poc.utils.Helper;
@@ -29,72 +29,62 @@ public class PocServiceImpl implements PocService {
 	public PocDto create(PocDto advertiser) {
 		PocEntity entity = new PocEntity();
 		BeanUtils.copyProperties(advertiser, entity);
-
-//		entity.setEncryptedPassword("test");
-//		entity.setUserId(helper.getRandomUserId());
 		PocEntity createdAdv = repository.save(entity); // saving
-
 		PocDto returnVal = new PocDto(); // making object to be returned to UI
 		BeanUtils.copyProperties(createdAdv, returnVal);
 		return returnVal;
 	}
 
+	
 	@Override
-	public PocDto getByUserId(long userId) {
+	public PocDto getByUserId(long id) {
 		PocDto returnVal = new PocDto(); 
 		//check for null object i.e.EXCEPTION
-		PocEntity entityReceived = repository.findById(userId);
+		PocEntity entityReceived = repository.searchSQLById(id);//repository.findById(userId);
 		BeanUtils.copyProperties(entityReceived, returnVal);
 		return returnVal;
 	}
 
+	
 	@Override
-	public PocDto update(long userId , PocDto updatedDto) {
+	public PocDto update(long id , PocDto updatedDto) {
 		//check first if user with id exist
 		PocDto returnVal = new PocDto(); 
-		PocEntity entity = repository.findById(userId);
-
-//		entity.setFirstName(updatedDto.getFirstName()); //ONLY UPDATING FN and LN
-//		entity.setLastName(updatedDto.getLastName());
+		PocEntity entity = repository.searchSQLById(id);//repository.findById(userId);
 		PocEntity updatedAdv  = repository.save(entity);
-
 		BeanUtils.copyProperties(updatedAdv, returnVal);
 		return returnVal;
 	}
 
+	
 	@Override
 	public void delete(long id) {
-		// TODO Auto-generated method stub
-		PocEntity deleteEntity = repository.findById(id);
+		PocEntity deleteEntity = repository.searchSQLById(id);//repository.findById(id);
 		repository.delete(deleteEntity);
 
 	}
 
+	
 	@Override
 	public List<PocResponseEntity> getAll() {
-		//		// TODO Auto-generated method stub
-		//		Iterable<PocEntity> iterable = repository.findAll();
-		//		List<PocResponseEntity> returnList = new ArrayList<PocResponseEntity>();
-		//		Itera
-		//		
-		return null;
-
+		List<PocEntity> iterable = repository.findAll();
+		List<PocResponseEntity> returnList = new ArrayList<PocResponseEntity>();
+		for (PocEntity i : iterable) {
+			PocResponseEntity returnElement = new PocResponseEntity();
+			BeanUtils.copyProperties(i, returnElement);
+			returnList.add(returnElement);
+		}
+		return returnList;
 	}
+	
+	
 
-//	@Override
-//	public StrategyQuickEditDTO getCastDetails(Long id) {
-//		StrategyQuickEditDTO strategyQuickEditDTO = new StrategyQuickEditDTO();
-//		strategyQuickEditDTO = repository.getCastDetails(id);
-//		if (strategyQuickEditDTO == null) {
-//			//new Exception("Strategy id is not valid");
-//		}
-//		return strategyQuickEditDTO;
-//	}
-//	
-//	@Override
-//	public Object random() {
-//		return repository.random();
-//	}
+	@Override
+	public SomeFeildsDTO getSomeFeilds(long id) {
+		SomeFeildsDTO someFeildsDTO = new SomeFeildsDTO();
+		someFeildsDTO = repository.getSomeFeilds(id);
+		return someFeildsDTO;
+	}
 
 
 }
