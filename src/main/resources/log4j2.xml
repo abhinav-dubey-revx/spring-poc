@@ -1,28 +1,68 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE project>
-<Configuration
-	xmlns="http://logging.apache.org/log4j/2.0/config">
+<Configuration xmlns="http://logging.apache.org/log4j/2.0/config">
 	<Properties>
-		<Property name="basePath">./resources/logs</Property>
+		<Property name="basePath">/atom/POC_LOGS</Property>
 	</Properties>
 	<Appenders>
-		<!-- File Appender -->
-		<File name="FILE" fileName="${basePath}/logfile.log"
-			append="true">
-			<PatternLayout
-				pattern="[%-5p][%d{dd-MMM-yyyy HH:mm:ss a}] %C{0}.%M:(%L) - %m%n" />
-		</File>
+
 		<!-- Console Appender -->
 		<Console name="STDOUT" target="SYSTEM_OUT">
-			<PatternLayout
-				pattern="[%-5p][%d{dd-MMM-yyyy HH:mm:ss a}] %C{0}.%M:(%L) - %m%n" />
+			<PatternLayout pattern="[%d] [%-6p] [%-15c] – %m%n" />
 		</Console>
+
+		<!-- ROLLING FILE APPENDER -->
+		<RollingFile name="rollingFile" fileName="${basePath}/poc.log" filePattern="${basePath}/application.%i.log.gz" ignoreExceptions="false">
+			<PatternLayout>
+				<Pattern>[%d] [%-6p] [%-15c] – %m%n</Pattern>
+			</PatternLayout>
+			<Policies>
+				<SizeBasedTriggeringPolicy size="10MB" />
+			</Policies>
+			<DefaultRolloverStrategy max="5" />
+		</RollingFile>
+
+		<!-- ROLLING FILE APPENDER -->
+		<RollingFile name="fogFile" fileName="${basePath}/pocFog.log" filePattern="${basePath}/application.%i.log.gz" ignoreExceptions="false">
+			<PatternLayout>
+				<Pattern>[%d] [%-6p] [%-15c] – %m%n</Pattern>
+			</PatternLayout>
+			<Policies>
+				<SizeBasedTriggeringPolicy size="10MB" />
+			</Policies>
+			<DefaultRolloverStrategy max="5" />
+		</RollingFile>
+
+
 	</Appenders>
+
+
 	<Loggers>
-		<Logger name="log" level="all" />
-		<Root level="all">
-			<AppenderRef ref="FILE" level="all" />
-			<AppenderRef ref="STDOUT" level="all" />
+
+		<!--EXPERIMENT STARTS-->
+		<!-- avoid duplicated logs with additivity=false -->
+		<!-- <Logger name="io.poc.service.impl" level="debug"
+			additivity="false">
+			<AppenderRef ref="STDOUT" />
+		</Logger> -->
+
+		<!-- <Logger name="io.poc.controller" level="debug"
+			additivity="false">
+			<AppenderRef ref="fogFile" />
+		</Logger> -->
+
+		<!-- <Root level="debug">
+			<AppenderRef ref="rollingFile" />
+		</Root> -->
+		<!--EXPERIMENT ENDS-->
+
+
+		<Root level="trace">
+			<AppenderRef ref="rollingFile" level="debug" />
+			<AppenderRef ref="STDOUT" level="debug" />
 		</Root>
+
 	</Loggers>
+
+
 </Configuration>

@@ -1,12 +1,17 @@
 package io.poc.service.impl;
 
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import io.poc.controller.PocController;
 import io.poc.entity.PocEntity;
 import io.poc.model.PocDto;
 import io.poc.model.PocResponseEntity;
@@ -18,6 +23,12 @@ import io.poc.utils.Helper;
 
 @Service
 public class PocServiceImpl implements PocService {
+
+	private static final Logger logger = LogManager.getLogger(PocServiceImpl.class);
+
+	private static final Logger FOG = LogManager.getLogger(PocServiceImpl.class);
+
+
 
 	@Autowired
 	PocRepository repository;
@@ -35,9 +46,23 @@ public class PocServiceImpl implements PocService {
 		return returnVal;
 	}
 
-	
+
 	@Override
 	public PocDto getByUserId(long id) {
+		logger.trace("trace - ServiceImpl !!!");
+		logger.debug("Debug - ServiceImpl !!!!");
+		logger.info("info - ServiceImpl !!!!");
+		logger.warn("warn - ServiceImpl !!!!");
+		logger.error("error - ServiceImpl !!!!");
+		logger.fatal("fatal - ServiceImpl !!!!");
+
+		//		FOG.trace("trace - ServiceImpl !!!");
+		//		FOG.debug("Debug - ServiceImpl !!!!");
+		//		FOG.info("info - ServiceImpl !!!!");
+		//		FOG.warn("warn - ServiceImpl !!!!");
+		//		FOG.error("error - ServiceImpl !!!!");
+		//		FOG.fatal("fatal - ServiceImpl !!!!");
+
 		PocDto returnVal = new PocDto(); 
 		//check for null object i.e.EXCEPTION
 		PocEntity entityReceived = repository.searchSQLById(id);//repository.findById(userId);
@@ -45,7 +70,7 @@ public class PocServiceImpl implements PocService {
 		return returnVal;
 	}
 
-	
+
 	@Override
 	public PocDto update(long id , PocDto updatedDto) {
 		//check first if user with id exist
@@ -56,7 +81,7 @@ public class PocServiceImpl implements PocService {
 		return returnVal;
 	}
 
-	
+
 	@Override
 	public void delete(long id) {
 		PocEntity deleteEntity = repository.searchSQLById(id);//repository.findById(id);
@@ -64,7 +89,7 @@ public class PocServiceImpl implements PocService {
 
 	}
 
-	
+
 	@Override
 	public List<PocResponseEntity> getAll() {
 		List<PocEntity> iterable = repository.findAll();
@@ -76,8 +101,8 @@ public class PocServiceImpl implements PocService {
 		}
 		return returnList;
 	}
-	
-	
+
+
 
 	@Override
 	public SomeFeildsDTO getSomeFeilds(long id) {

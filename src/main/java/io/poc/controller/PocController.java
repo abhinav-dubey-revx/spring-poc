@@ -5,7 +5,7 @@ import org.apache.logging.log4j.LogManager;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.logging.log4j.LogManager;
+//import org.apache.logging.log4j.LogManager;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -32,10 +32,10 @@ import io.swagger.annotations.ApiOperation;
 @RequestMapping("/advertiser") // http:localhost:<port>/advertiser/<mapping_url>
 public class PocController {
 
-	private static final Logger logger = LogManager.getLogger(PocController.class);
+	private static final Logger logger = LogManager.getLogger(PocController.class) ;//getRootLogger();// (PocController.class);
 
-	@Autowired
-	PocService service;
+			@Autowired
+			PocService service;
 
 	@Autowired
 	Helper helper;
@@ -64,6 +64,15 @@ public class PocController {
 	@ApiOperation(value="get advertiser by Id" , notes= "advertiser from DB : from AdX.Advertiser")
 	@GetMapping(path = "/get/{id}")
 	public PocResponseEntity getById(@PathVariable String id) {
+		logger.trace("trace - controller !!!");
+		logger.debug("Debug - controller !!!!");
+		logger.info("info - controller !!!!");
+		logger.warn("warn - controller !!!!");
+		logger.error("error - controller !!!!");
+		logger.fatal("fatal - controller !!!!");
+		
+		helper.logMe();
+
 		PocResponseEntity returnVal = new PocResponseEntity();
 		PocDto dto = service.getByUserId(Long.parseLong(id));
 		BeanUtils.copyProperties(dto, returnVal);
