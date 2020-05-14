@@ -10,6 +10,8 @@ import org.springframework.context.annotation.ComponentScan;
 @SpringBootApplication
 public class PocApplication {
 
+	//this is  a dummy comment
+	//this is another dummy comment
 	public static void main(String[] args) {
 		SpringApplication.run(PocApplication.class, args);
 	}
